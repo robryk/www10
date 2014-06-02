@@ -7,8 +7,7 @@ Napisz program w C++, który:
 Opis do zadań 2-5
 
 Zadania te polegają na wyobrażeniu sobie, jak działają programy wielowątkowe. W każdym z nich mamy parę programów, które będą się
-wykonywać jednocześnie. Przez "wykonywać jednocześnie" rozumiemy, że wykonujemy na zmianę ich kawałki. Zakładamy, że każdy taki kawałek się
-kończy i zaczyna w dowolnym punkcie pomiędzy linijkami programu.
+wykonywać jednocześnie. Przez "wykonywać jednocześnie" rozumiemy, że wykonujemy je po jednej linijce: po wykonaniu każdej linijki wykonujemy kolejną linijkę z tego samego lub drugiego programu.
 
 Przykład
 
@@ -76,7 +75,8 @@ print("bar1")
 Chce1 = 0
 
 Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane "foo0 foo1 bar0 bar1"?
-Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane coś innego niż "foo0 bar0 foo1 bar1" lub "foo1 bar1 foo0 bar0"?
+Czy może się zdarzyć, że wynikiem ich działania może być coś innego niż wypisanie "foo0 bar0 foo1 bar1" lub "foo1 bar1 foo0 bar0"?
+Swoje odpowiedzi uzasadnij.
 
 Zadanie 4
 
@@ -97,9 +97,12 @@ print("bar1")
 Kto = 0
 
 Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane "foo0 foo1 bar0 bar1"?
-Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane coś innego niż "foo0 bar0 foo1 bar1" lub "foo1 bar1 foo0 bar0"?
+Czy może się zdarzyć, że wynikiem ich działania może być coś innego niż wypisanie "foo0 bar0 foo1 bar1" lub "foo1 bar1 foo0 bar0"?
+Swoje odpowiedzi uzasadnij.
 
 Zadanie 5*
+
+[footnote] To zadanie jest istotnie trudniejsze.
 
 Mamy trzy zmienne globalne: Kto, Chce0, Chce1, początkowo wszystkie równe 0. Mamy dwa programy:
 
@@ -124,3 +127,4 @@ Chce1 = 0
 Kto = 0
 
 Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane "foo0 foo1 bar0 bar1"?
+Swoje odpowiedzi uzasadnij.
