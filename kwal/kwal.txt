@@ -1,0 +1,126 @@
+Zadanie 1
+
+Napisz program w C++, który:
+* wczyta ze standardowego wejścia trzy liczby
+* wypisze na standardowe wyjście `TAK` gdy jedna z nich jest dwukrotnością którejś innej, bądź `NIE` w przeciwnym przypadku.
+
+Opis do zadań 2-5
+
+Zadania te polegają na wyobrażeniu sobie, jak działają programy wielowątkowe. W każdym z nich mamy parę programów, które będą się
+wykonywać jednocześnie. Przez "wykonywać jednocześnie" rozumiemy, że wykonujemy na zmianę ich kawałki. Zakładamy, że każdy taki kawałek się
+kończy i zaczyna w dowolnym punkcie pomiędzy linijkami programu.
+
+Przykład
+
+Mamy zmienną globalną X (początkowo 0) i następujące dwa programy:
+
+Program A:
+a = X
+X = a + 1
+
+Program B:
+b = X
+X = b + 1
+
+Po ich wykonaniu zmienna X może przyjmować wartość 1 lub 2, w zależności od tego, jak się one podzielą na kawałki.
+Jeśli wykonają się w następującej kolejności:
+
+A1 a = X (0)
+A2 X = a + 1 (1)
+B1 b = X (1)
+B2 X = b + 1 (2)
+
+to X będzie miał na końcu wartość 2. Jeśli natomiast wykonają się w takiej kolejności:
+
+A1 a = X (0)
+B1 b = X (0)
+B2 X = b + 1 (1)
+A2 X = a + 1 (1)
+
+to X będzie miał na końcu wartość 1.
+
+Zadanie 2
+
+Mamy dwie zmienne globalne: X i Y. Początkowo obie są równe 0. Mamy następujące dwa programy:
+
+Program A:
+Y = 1
+print("A:" X)
+
+Program B:
+X = 1
+print("B:" Y)
+
+Co te programy mogą wypisać, jeśli uruchomimy je oba na raz (możesz zignorować kolejność linijek na wyjściu)? Dla każdej z czterech możliwości uzasadnij, czemu może lub nie może ona nastąpić.
+
+Zadanie 3
+
+[footnote]Często w programach wielowątkowych nie chcemy, żeby pewne dwie rzeczy mogły dziać się na raz. To i kolejne zadanie dotyczą (być może błędnych) sposobów powodowania tego.
+
+Mamy dwie zmienne globalne: Chce0 i Chce1, początkowo równe 0. Mamy następujące dwa programy:
+
+Program 0:
+Chce0 = 1
+loop forever
+	if Chce1 == 0 break
+print("foo0")
+print("bar0")
+Chce0 = 0
+
+Program 1:
+Chce1 = 1
+loop forever
+	if Chce0 == 0 break
+print("foo1")
+print("bar1")
+Chce1 = 0
+
+Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane "foo0 foo1 bar0 bar1"?
+Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane coś innego niż "foo0 bar0 foo1 bar1" lub "foo1 bar1 foo0 bar0"?
+
+Zadanie 4
+
+Mamy jedną zmienną globalną: Kto, początkowo równą 0. Mamy dwa programy:
+
+Program 0:
+loop forever
+	if Kto == 0 break
+print("foo0")
+print("bar0")
+Kto = 1
+
+Program 1:
+loop forever
+	if Kto == 1 break
+print("foo1")
+print("bar1")
+Kto = 0
+
+Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane "foo0 foo1 bar0 bar1"?
+Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane coś innego niż "foo0 bar0 foo1 bar1" lub "foo1 bar1 foo0 bar0"?
+
+Zadanie 5*
+
+Mamy trzy zmienne globalne: Kto, Chce0, Chce1, początkowo wszystkie równe 0. Mamy dwa programy:
+
+Program 0:
+Chce0 = 1
+loop forever
+	if Kto == 0 LUB Chce1 == 0 break
+Kto = 0
+print("foo0")
+print("bar0")
+Chce0 = 0
+Kto = 1
+
+Program 1:
+Chce1 = 1
+loop forever
+	if Kto == 1 LUB Chce0 == 0 break
+Kto = 1
+print("foo1")
+print("bar1")
+Chce1 = 0
+Kto = 0
+
+Czy może się zdarzyć, że w wyniku ich działania zostanie wypisane "foo0 foo1 bar0 bar1"?
