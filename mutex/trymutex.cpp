@@ -2,10 +2,9 @@
 #include <mutex>
 #include <iostream>
 #include "bench.h"
+#include <cassert>
 
 using namespace std;
-
-mutex mu;
 
 void init() {
 }
@@ -16,11 +15,15 @@ bool trylock() {
 void unlock() {
 }
 
+std::atomic<int> tester;
+
 void bench_thread(B* b) {
 	while (!b->should_stop()) {
 		while (!trylock()) {
 			b->inc();
 		}
+		assert(tester.exchange(1) == 0);
+		tester.store(0);
 		unlock();
 		b->inc();
 	}
