@@ -3,43 +3,49 @@
 #include <iostream>
 #include "bench.h"
 #include <cassert>
+#include <semaphore.h>
 
 using namespace std;
 
 constexpr int n_accounts = 1000;
 
-mutex mu;
+sem_t sema;
 int values[n_accounts];
 
 void init() {
+	assert(sem_init(&sema, 0, 1) == 0);
 	for(int i=0;i<n_accounts;i++)
 		values[i] = 0;
 }
 
+void destroy() {
+	assert(sem_destroy(&sema) == 0);
+}
+
 void add(int to, int amount) {
 	assert(amount >= 0);
-	mu.lock();
+	sem_wait(&sema);
 	values[to] += amount;
-	mu.unlock();
+	sem_post(&sema);
 }
 
 bool txfr(int from, int to, int amount) {
 	bool ret = false;
 	assert(amount >= 0);
-	mu.lock();
+	sem_wait(&sema);
 	if (values[from] >= amount) {
 		values[from] -= amount;
 		values[to] += amount;
 		ret = true;
 	}
-	mu.unlock();
+	sem_post(&sema);
 	return ret;
 }
 
 int read(int accnt) {
-	mu.lock();
+	sem_wait(&sema);
 	int r = values[accnt];
-	mu.unlock();
+	sem_post(&sema);
 	return r;
 }
 
@@ -70,6 +76,7 @@ void bench_random(int n_threads) {
 	for(int i=0;i<n_accounts;i++) {
 		total_after += read(i);
 	}
+	destroy();
 	assert(total_before == total_after);
 	cout << n_threads << " threads, random - " << b.report() << " ops/us\n";
 }
