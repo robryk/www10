@@ -1,1 +1,1 @@
-CXXFLAGS = -pthread -std=c++11
+CXXFLAGS = -pthread -std=c++11 -O2
