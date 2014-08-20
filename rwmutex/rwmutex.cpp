@@ -43,7 +43,7 @@ void tester_thread(B* b, int read_count) {
 			assert(tester.fetch_add(1) < (1<<20));
 			b->inc();
 			assert(tester.fetch_add(-1) < (1<<20));
-			unlock();
+			runlock();
 		}
 	}
 }
