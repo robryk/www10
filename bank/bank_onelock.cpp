@@ -9,44 +9,41 @@ using namespace std;
 
 constexpr int n_accounts = 1000;
 
-sem_t sema;
-int values[n_accounts];
+sem_t semas[n_accounts];
+atomic<int> values[n_accounts];
 
 void init() {
-	assert(sem_init(&sema, 0, 1) == 0);
-	for(int i=0;i<n_accounts;i++)
+	for(int i=0;i<n_accounts;i++) {
+		assert(sem_init(&semas[i], 0, 1) == 0);
 		values[i] = 0;
+	}
 }
 
 void destroy() {
-	assert(sem_destroy(&sema) == 0);
+	for(int i=0;i<n_accounts;i++) {
+		assert(sem_destroy(&semas[i]) == 0);
+	}
 }
 
 void add(int to, int amount) {
 	assert(amount >= 0);
-	sem_wait(&sema);
-	values[to] += amount;
-	sem_post(&sema);
+	values[to].fetch_add(amount);
 }
 
 bool txfr(int from, int to, int amount) {
-	bool ret = false;
-	assert(amount >= 0);
-	sem_wait(&sema);
-	if (values[from] >= amount) {
-		values[from] -= amount;
-		values[to] += amount;
-		ret = true;
+	sem_wait(&semas[from]);
+	if (values[from].load() < amount) {
+		sem_post(&semas[from]);
+		return false;
 	}
-	sem_post(&sema);
-	return ret;
+	values[from].fetch_add(-amount);
+	values[to].fetch_add(amount);
+	sem_post(&semas[from]);
+	return true;
 }
 
 int read(int accnt) {
-	sem_wait(&sema);
-	int r = values[accnt];
-	sem_post(&sema);
-	return r;
+	return values[accnt].load();
 }
 
 // IMPLEMENTACJA POWYZEJ
